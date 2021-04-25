@@ -113,6 +113,8 @@ public class SoundController extends JPanel {
             }catch(IOException exception){
                 out.println(exception);
             }
+        }else if(operatingSystem.toLowerCase().contains("windows")){
+            //TODO get volume
         }
         return 0;
     }
@@ -144,6 +146,34 @@ public class SoundController extends JPanel {
             }catch(IOException exception){
                 out.println(exception);
                 out.println("Unable to set volume using amixer");
+            }
+        }else if(os.toLowerCase().contains("windows")){
+            Runtime runtime=Runtime.getRuntime();
+            try{
+                volume=65535*volume/100;
+                Process pro=runtime.exec("nircmd/nircmd setsysvolume "+volume);
+                BufferedReader stdIn=new BufferedReader(new InputStreamReader(pro.getInputStream()));
+                BufferedReader stdErr=new BufferedReader(new InputStreamReader(pro.getErrorStream()));
+                String str=null;
+                boolean flag=true;
+                while((str=stdIn.readLine())!=null){
+                    if(flag) {
+                        out.println("output : ");
+                        flag=false;
+                    }
+                    out.println(str);
+                }
+                flag=true;
+                while((str=stdErr.readLine())!=null){
+                    if(flag) {
+                        out.println("error : ");
+                        flag=false;
+                    }
+                    out.println(str);
+                }
+            }catch(IOException exception){
+                out.println(exception);
+                out.println("Unable to set volume using nircmdc");
             }
         }
     }
