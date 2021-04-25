@@ -55,6 +55,7 @@ public class BrightnessController extends JPanel {
         }
     }
     public static double getBrightness(){
+        double value=0;
         String operatingSystem=System.getProperty("os.name");
         out.println(operatingSystem);
         if(operatingSystem.equalsIgnoreCase("Linux")){
@@ -62,8 +63,42 @@ public class BrightnessController extends JPanel {
 
         }else if(operatingSystem.toLowerCase().contains("windows")){
             //TODO get volume
+            Runtime runtime=Runtime.getRuntime();
+            try{
+                Process pro=runtime.exec("powershell -Command \"Get-Ciminstance -Namespace root/WMI -ClassName WmiMonitorBrightness | Select -ExpandProperty \"CurrentBrightness\"\"");
+                BufferedReader stdIn=new BufferedReader(new InputStreamReader(pro.getInputStream()));
+                BufferedReader stdErr=new BufferedReader(new InputStreamReader(pro.getErrorStream()));
+                String str=null;
+                boolean flag=true;
+                while((str=stdIn.readLine())!=null){
+                    if(flag) {
+                        out.println("output : ");
+                        flag=false;
+                    }
+                    out.println(str);
+                    boolean isInt=str.length()>0;
+                    for(int i=0;i<str.length();i++)
+                        if(!Character.isDigit(str.charAt(i))){
+                            isInt=false;
+                            break;
+                        }
+                    if(isInt)
+                        value=Integer.parseInt(str);
+                }
+                flag=true;
+                while((str=stdErr.readLine())!=null){
+                    if(flag) {
+                        out.println("error : ");
+                        flag=false;
+                    }
+                    out.println(str);
+                }
+            }catch(IOException exception){
+                out.println(exception);
+                out.println("Unable to set brightness using nircmd");
+            }
         }
-        return 0;
+        return value;
     }
     public static void setBrightness(double brightness){
         String os=System.getProperty("os.name");

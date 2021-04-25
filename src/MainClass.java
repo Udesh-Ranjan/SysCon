@@ -6,6 +6,7 @@ public class MainClass {
     private final MainFrame mainFrame;
     public MainClass(){
         mainFrame=new MainFrame(500,500);
+        mainFrame.setTitle("SysCon");
         mainFrame.setVisible(true);
     }
     public static void main(String $[]){
