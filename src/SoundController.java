@@ -115,6 +115,50 @@ public class SoundController extends JPanel {
             }
         }else if(operatingSystem.toLowerCase().contains("windows")){
             //TODO get volume
+            Runtime runtime=Runtime.getRuntime();
+            try {
+                double value=0;
+                Process pro = runtime.exec("soundvolumeview/soundbat.bat");
+                BufferedReader stdIn=new BufferedReader(new InputStreamReader(pro.getInputStream()));
+                BufferedReader stdErr=new BufferedReader(new InputStreamReader(pro.getErrorStream()));
+                String str=null;
+                StringBuilder builder=new StringBuilder();
+                boolean flag=true;
+                while((str=stdIn.readLine())!=null){
+                    if(flag) {
+                        out.println("output :");
+                        flag=false;
+                    }
+                    out.println(str);
+                    builder.append(str);
+                }
+                StringTokenizer tokenizer=new StringTokenizer(builder.toString()," ");
+                while(tokenizer.hasMoreTokens()){
+                    String token=tokenizer.nextToken();
+//                    out.println("token : "+token);
+                    boolean intValue=token.length()>0;
+                    for(int i=0;i<token.length();i++)
+                        if(!Character.isDigit(token.charAt(i))){
+                            intValue=false;
+                            break;
+                        }
+                    if(intValue)
+                        value=Integer.parseInt(token)/10;
+                }
+                flag=true;
+                while((str=stdErr.readLine())!=null){
+                    if(flag) {
+                        out.println("error :");
+                        flag=false;
+                    }
+                    out.println(str);
+                }
+                out.println("Execution finished");
+                out.println("value : "+value);
+                return value;
+            }catch(IOException exception){
+                out.println(exception);
+            }
         }
         return 0;
     }
