@@ -13,7 +13,9 @@ public class MainFrame extends JFrame {
         this.setLayout(new FlowLayout(FlowLayout.CENTER,
                 10,10));
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        soundController=new SoundController(300,300,SoundController.getVolume());
+        final double volume=SoundController.getVolume();
+        System.out.println("initializing volume : "+volume);
+        soundController=new SoundController(300,300,volume);
         brightnessController=new BrightnessController(300,300,BrightnessController.getBrightness());
         this.add(soundController);
         this.add(brightnessController);
