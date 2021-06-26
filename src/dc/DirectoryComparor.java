@@ -8,28 +8,30 @@ import java.util.List;
 
 public class DirectoryComparor {
     public static boolean areSameDirectories(final File file1, final File file2) {
+        System.out.println("file 1 " + file1.getAbsolutePath());
+        System.out.println("file 2 " + file2.getAbsolutePath());
         if (!file1.exists()) {
-            System.out.println(file1.getAbsolutePath() + " doesn't exists");
+            System.out.println("..." + file1.getAbsolutePath() + " doesn't exists");
             return false;
         }
         if (!file2.exists()) {
-            System.out.println(file2.getAbsolutePath() + " doesn't exists");
+            System.out.println("..." + file2.getAbsolutePath() + " doesn't exists");
             return false;
         }
         File[] array1 = file1.listFiles();
         File[] array2 = file2.listFiles();
 
-        if(array1==null){
-            System.out.println("folder is cannot be accessed "+file1.getAbsolutePath());
-            System.out.println(file1.getAbsolutePath()+" is readable "+file1.canRead());
+        if (array1 == null) {
+            System.out.println("folder is cannot be accessed " + file1.getAbsolutePath());
+            System.out.println(file1.getAbsolutePath() + " is readable " + file1.canRead());
 //            System.out.println("please run as admin");
         }
-        if(array2==null){
-            System.out.println("folder cannot be accessed "+file2.getAbsolutePath());
-            System.out.println(file1.getAbsolutePath()+" is readable "+file2.canRead());
+        if (array2 == null) {
+            System.out.println("folder cannot be accessed " + file2.getAbsolutePath());
+            System.out.println(file1.getAbsolutePath() + " is readable " + file2.canRead());
 //            System.out.println("please run as admin");
         }
-        if(array1==null || array2==null)
+        if (array1 == null || array2 == null)
             return false;
         final List<File> content1 = Arrays.asList(array1);
         final List<File> content2 = Arrays.asList(array2);

@@ -2,6 +2,8 @@ import dc.DirectoryComparor;
 import dc.FileComparor;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author :  dev parzival
@@ -36,9 +38,48 @@ public class MainClass {
         }
     }
 
+    public static String[] split(final String str) {
+        final List<String> list = new ArrayList<>();
+        boolean flag = false;
+        int prevIndex = -1;
+        StringBuilder stringBuilder = new StringBuilder("");
+        for (int i = 0; i < str.length(); i++) {
+            char ch = str.charAt(i);
+            if (ch == ' ') {
+                if (flag) {
+                    continue;
+                }
+                if (stringBuilder.toString().length() > 0)
+                    list.add(stringBuilder.toString().trim());
+                stringBuilder = new StringBuilder();
+            }
+            if (ch == '\"') {
+                if (flag) {
+                    list.add(str.substring(prevIndex, i + 1).trim());
+                    flag = false;
+                    stringBuilder = new StringBuilder("");
+                    continue;
+                }
+                flag = true;
+                prevIndex = i;
+                continue;
+            }
+            stringBuilder.append(ch);
+        }
+        if (!stringBuilder.isEmpty())
+            list.add(stringBuilder.toString().trim());
+        System.out.println("after parsing : " + list);
+        return list.toArray(String[]::new);
+    }
+
     public static void execute(final String cmd) {
         System.out.println("cmd : " + cmd + ".");
-        String arr[] = cmd.split(" ");
+//        String arr[] = cmd.split(" ");
+        String arr[] = split(cmd);
+        for (String str : arr) {
+            System.out.print(str + "-");
+        }
+        System.out.println();
         if (arr.length >= 1) {
             if (arr[0].equals("mutevolume")) {
                 System.out.println("mute : system volume");
@@ -66,15 +107,25 @@ public class MainClass {
                         else System.out.println("files didn't match");
                     }
                     if (arr[0].equals("dc")) {
-                        if (!DirectoryComparor.areSameDirectories(new File(arr[1]), new File(arr[2])))
+                        String file1 = filter(arr[1]);
+                        String file2 = filter(arr[2]);
+                        if (!DirectoryComparor.areSameDirectories(new File(file1), new File(file2)))
                             System.out.println(arr[1] + " and " + arr[2] + " didn't match");
                         else System.out.println(arr[1] + " and " + arr[2] + " matched");
                     }
                 }
             }
         }
+    }
 
-
+    public static String filter(final String str) {
+        final StringBuilder sb = new StringBuilder(str.length());
+        for (final char ch : str.toCharArray()) {
+            if (ch == '\"' || ch == '\'')
+                continue;
+            sb.append(ch);
+        }
+        return sb.toString();
     }
 
     public static boolean isParsableDouble(final String str) {
