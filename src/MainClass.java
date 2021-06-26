@@ -1,3 +1,8 @@
+import dc.DirectoryComparor;
+import dc.FileComparor;
+
+import java.io.File;
+
 /**
  * @author :  dev parzival
  * @date :  18 Apr, 2021
@@ -18,7 +23,7 @@ public class MainClass {
         for (final String str : $)
             System.out.println(str);
         */
-        System.out.println(System.getProperty("Present working directory : " + "dir"));
+        System.out.println("Present working dir " + System.getProperty("user.dir"));
         if ($.length != 0) {
             StringBuilder cmd = new StringBuilder("");
             for (int i = 0; i < $.length; i++) {
@@ -53,6 +58,18 @@ public class MainClass {
                     if (isParsableDouble(arr[1])) {
                         BrightnessController.setBrightness(Double.parseDouble(arr[1]));
                     } else System.out.println("Not a valid value : " + arr[1]);
+                }
+                if (arr.length >= 3) {
+                    if (arr[0].equals("fc")) {
+                        if (FileComparor.areSameFiles(new File(arr[1]), new File(arr[2])))
+                            System.out.println("files matched");
+                        else System.out.println("files didn't match");
+                    }
+                    if (arr[0].equals("dc")) {
+                        if (!DirectoryComparor.areSameDirectories(new File(arr[1]), new File(arr[2])))
+                            System.out.println(arr[1] + " and " + arr[2] + " didn't match");
+                        else System.out.println(arr[1] + " and " + arr[2] + " matched");
+                    }
                 }
             }
         }
