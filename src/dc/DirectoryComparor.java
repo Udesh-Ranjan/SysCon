@@ -36,8 +36,10 @@ public class DirectoryComparor {
         final List<File> content1 = Arrays.asList(array1);
         final List<File> content2 = Arrays.asList(array2);
 
-        if (file1.length() != file2.length()) {
-            System.out.println("Numbers of files are different in " + file1.getAbsolutePath() + " " + file2.getAbsolutePath());
+        if (array1.length != array2.length) {
+            System.out.println("Numbers of files are different in " + file1.getAbsolutePath() + "," + file2.getAbsolutePath());
+            System.out.println("file1 length " + array1.length);
+            System.out.println("file2 length " + array2.length);
             return false;
         }
         final List<File> files1 = new ArrayList<>();
@@ -51,6 +53,9 @@ public class DirectoryComparor {
                 files2.add(file);
         }
         if (files1.size() != files2.size()) {
+            System.out.println("Numbers of files are different in " + file1.getAbsolutePath() + "," + file2.getAbsolutePath());
+            System.out.println("files1 files " + files1.size());
+            System.out.println("files2 files " + files2.size());
             return false;
         }
         files1.sort(Comparator.comparing(File::getName));

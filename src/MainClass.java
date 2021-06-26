@@ -44,7 +44,7 @@ public class MainClass {
         int prevIndex = -1;
         StringBuilder stringBuilder = new StringBuilder("");
         for (int i = 0; i < str.length(); i++) {
-            char ch = str.charAt(i);
+            final char ch = str.charAt(i);
             if (ch == ' ') {
                 if (flag) {
                     continue;
@@ -131,7 +131,7 @@ public class MainClass {
     public static boolean isParsableDouble(final String str) {
         try {
             Double.parseDouble(str);
-        } catch (Exception exception) {
+        } catch (final Exception exception) {
             return false;
         }
         return true;
